@@ -1,0 +1,86 @@
+{
+    "name": "E61 with dropping pressure",
+    "id": "4cdc0015-07cd-4738-b198-c7d8742acd2b",
+    "author": "meticulous",
+    "author_id": "d9123a0a-d3d7-40fd-a548-b81376e43f23",
+    "previous_authors": [
+        {
+            "name": "mimoja",
+            "author_id": "d9123a0a-d3d7-40fd-a548-b81376e43f23",
+            "profile_id": "0cdf18ca-d72e-4776-8e25-7b3279907dce"
+        },
+        {
+            "name": "decentespresso",
+            "author_id": "ee86a777-fdd6-46d6-8cf7-099a9fb609a1",
+            "profile_id": "58036fd5-7d5b-4647-9ab6-2832014bb9be"
+        }
+    ],
+    "temperature": 90.5,
+    "final_weight": 40.0,
+    "variables": [
+        {
+            "name": "Pressure",
+            "key": "pressure_1",
+            "type": "pressure",
+            "value": 8
+        }
+    ],
+    "stages": [
+        {
+            "name": "Preinfusion",
+            "type": "flow",
+            "dynamics": {
+                "points": [
+                    [
+                        0,
+                        4
+                    ]
+                ],
+                "over": "time",
+                "interpolation": "linear"
+            },
+            "exit_triggers": [
+                {
+                    "type": "time",
+                    "value": 30,
+                    "relative": true,
+                    "comparison": "greater"
+                },
+                {
+                    "type": "weight",
+                    "value": 0.3,
+                    "relative": true,
+                    "comparison": "greater"
+                },
+                {
+                    "type": "pressure",
+                    "value": "$pressure_1",
+                    "relative": false,
+                    "comparison": "greater"
+                }
+            ],
+            "limits": []
+        },
+        {
+            "name": "Infusion",
+            "type": "pressure",
+            "dynamics": {
+                "points": [
+                    [
+                        0,
+                        "$pressure_1"
+                    ]
+                ],
+                "over": "time",
+                "interpolation": "linear"
+            },
+            "exit_triggers": [],
+            "limits": [
+                {
+                    "type": "flow",
+                    "value": 3
+                }
+            ]
+        }
+    ]
+}
