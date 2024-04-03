@@ -29,6 +29,7 @@
         {
             "name": "Preinfusion",
             "type": "flow",
+            "key": "stage_1",
             "dynamics": {
                 "points": [
                     [
@@ -64,6 +65,7 @@
         {
             "name": "Infusion",
             "type": "pressure",
+            "key": "stage_2",
             "dynamics": {
                 "points": [
                     [
