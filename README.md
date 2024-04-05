@@ -1,4 +1,6 @@
 # Meticulous Machine Profile Format
 
 This repo contains an example profile and a json schema for the meticulous profile json.
-A full writeup is in the making and will be released at a later time
+
+rfc.md contains a super dirty explanation which is a) unfinished and b) only public to serve as a basis for discussion.
+A final and dependable version will be marked as such!
