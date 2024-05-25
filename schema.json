@@ -227,10 +227,8 @@
         "id",
         "author",
         "author_id",
-        "previous_authors",
         "temperature",
         "final_weight",
-        "variables",
         "stages"
     ]
 }
