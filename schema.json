@@ -40,6 +40,12 @@
                 ]
             }
         },
+        "display": {
+            "image": {
+                "type": "string",
+                "format": "uri-reference"
+            }
+        },
         "temperature": {
             "type": "number",
             "minimum": 0,
