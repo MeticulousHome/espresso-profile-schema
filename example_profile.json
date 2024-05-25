@@ -48,19 +48,19 @@
                     "type": "time",
                     "value": 30,
                     "relative": true,
-                    "comparison": "greater"
+                    "comparison": ">="
                 },
                 {
                     "type": "weight",
                     "value": 0.3,
                     "relative": true,
-                    "comparison": "greater"
+                    "comparison": ">="
                 },
                 {
                     "type": "pressure",
                     "value": "$pressure_1",
                     "relative": false,
-                    "comparison": "greater"
+                    "comparison": ">="
                 }
             ],
             "limits": []
