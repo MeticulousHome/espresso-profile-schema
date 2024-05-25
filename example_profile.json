@@ -15,6 +15,9 @@
             "profile_id": "58036fd5-7d5b-4647-9ab6-2832014bb9be"
         }
     ],
+    "display": {
+        "image": "/api/v1/profile/image/0acc9eec8455a96de1c83250eca6d7f3.png"
+    },
     "temperature": 90.5,
     "final_weight": 40.0,
     "variables": [
