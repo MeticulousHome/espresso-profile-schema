@@ -16,6 +16,7 @@
         }
     ],
     "display": {
+        "accentColor": "#FF5733",
         "image": "/api/v1/profile/image/0acc9eec8455a96de1c83250eca6d7f3.png"
     },
     "temperature": 90.5,
