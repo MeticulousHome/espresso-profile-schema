@@ -41,9 +41,17 @@
             }
         },
         "display": {
-            "image": {
-                "type": "string",
-                "format": "uri-reference"
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "string",
+                    "format": "uri-reference"
+                },
+                "accentColor": {
+                    "type": "string",
+                    "pattern": "^#[0-9A-Fa-f]{6}$",
+                    "description": "Accent color in RGB hex format"
+                }
             }
         },
         "temperature": {
