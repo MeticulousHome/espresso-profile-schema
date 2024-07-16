@@ -130,7 +130,7 @@
                                 "items": {
                                     "type": "array",
                                     "items": {
-                                        "oneOf": [
+                                        "anyOf": [
                                             {
                                                 "type": "number"
                                             },
@@ -185,7 +185,7 @@
                                     ]
                                 },
                                 "value": {
-                                    "oneOf": [
+                                    "anyOf": [
                                         {
                                             "type": "number"
                                         },
@@ -226,7 +226,7 @@
                                     ]
                                 },
                                 "value": {
-                                    "oneOf": [
+                                    "anyOf": [
                                         {
                                             "type": "number"
                                         },
