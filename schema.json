@@ -56,6 +56,13 @@
                     "type": "string",
                     "pattern": "^#[0-9A-Fa-f]{6}$",
                     "description": "Accent color in RGB hex format"
+                },
+                "shortDescription": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "description": {
+                    "type": "string"
                 }
             }
         },
