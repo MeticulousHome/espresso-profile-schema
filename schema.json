@@ -274,5 +274,6 @@
         "temperature",
         "final_weight",
         "stages"
-    ]
+    ],
+    "additionalProperties": false
 }
