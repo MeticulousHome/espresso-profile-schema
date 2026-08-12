@@ -165,7 +165,7 @@ Variables are to be set prior to the start of the brewing process and can theref
     - **type**: The kind of condition to monitor (e.g., "weight," "pressure," "time"), directing the machine on what sensor feedback or internal timer to evaluate.
     - **value**: The specific threshold that activates the trigger, indicating when the stage's goal has been achieved or a certain limit has been reached.
     - **relative**: (Optional) A boolean indicating whether the trigger's value is relative to the start of the stage or absolute.
-    - **comparison**: (Optional) Specifies whether the trigger activates when the monitored value is "greater" or "less" than the specified value, adding flexibility in defining exit conditions.
+    - **comparison**: (Optional) Specifies whether the trigger activates when the monitored value is strictly greater than (`>`), strictly less than (`<`), greater than or equal to (`>=`), or less than or equal to (`<=`) the specified value. Each explicit operator preserves its own boundary semantics. When omitted, consumers use `>=` for compatibility.
 
 - **limits**: (Optional) Constraints applied to parameters within the stage to prevent exceeding the machine's capabilities or safety thresholds. Each limit specifies:
     - **type**: The parameter to constrain (e.g., "flow," "pressure"), ensuring that the stage does not push the machine beyond safe operational bounds.
