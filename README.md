@@ -18,7 +18,7 @@ semantics:
 The `comparison` field remains optional. When it is omitted, consumers use
 `>=` for compatibility with existing profiles. Explicit comparison values are
 preserved as written; none of the four supported values is deprecated or
-migrated to another value.
+migrated to another value, and none is considered legacy.
 
 Run the dependency-free repository contract check with PowerShell:
 
