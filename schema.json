@@ -212,7 +212,17 @@
                                 },
                                 "comparison": {
                                     "type": "string",
+                                    "description": "Comparison applied to the exit-trigger value. Explicit '>', '<', '>=', and '<=' values preserve their strict or inclusive semantics. When omitted, consumers use '>=' for compatibility.",
+                                    "default": ">=",
                                     "enum": [
+                                        ">",
+                                        "<",
+                                        ">=",
+                                        "<="
+                                    ],
+                                    "examples": [
+                                        ">",
+                                        "<",
                                         ">=",
                                         "<="
                                     ]
