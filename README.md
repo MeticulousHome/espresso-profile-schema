@@ -20,8 +20,8 @@ The `comparison` field remains optional. When it is omitted, consumers use
 preserved as written; none of the four supported values is deprecated or
 migrated to another value, and none is considered legacy.
 
-Run the dependency-free repository contract check with PowerShell:
+Run the dependency-free repository contract check with Node:
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File ./tests/validate-contract.ps1
+```sh
+node tests/validate-contract.test.js
 ```
