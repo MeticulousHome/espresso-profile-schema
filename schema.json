@@ -7,6 +7,34 @@
             "minimum": 1,
             "multipleOf": 1
         },
+        "profile_type": {
+            "type": "string",
+            "enum": [
+                "espresso",
+                "cleaning"
+            ],
+            "default": "espresso"
+        },
+        "workflow": {
+            "type": "array",
+            "items": [
+                {
+                    "const": "heat"
+                },
+                {
+                    "const": "wait_for_dial"
+                },
+                {
+                    "const": "raise"
+                },
+                {
+                    "const": "purge"
+                }
+            ],
+            "additionalItems": false,
+            "minItems": 4,
+            "maxItems": 4
+        },
         "name": {
             "type": "string"
         },
@@ -266,13 +294,62 @@
             }
         }
     },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "profile_type": {
+                        "const": "cleaning"
+                    }
+                },
+                "required": [
+                    "profile_type"
+                ]
+            },
+            "then": {
+                "required": [
+                    "workflow"
+                ],
+                "properties": {
+                    "temperature": {
+                        "type": "number",
+                        "exclusiveMinimum": 0,
+                        "maximum": 65
+                    }
+                },
+                "not": {
+                    "anyOf": [
+                        {
+                            "required": [
+                                "final_weight"
+                            ]
+                        },
+                        {
+                            "required": [
+                                "stages"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "else": {
+                "required": [
+                    "final_weight",
+                    "stages"
+                ],
+                "not": {
+                    "required": [
+                        "workflow"
+                    ]
+                }
+            }
+        }
+    ],
     "required": [
         "name",
         "id",
         "author",
         "author_id",
-        "temperature",
-        "final_weight",
-        "stages"
+        "temperature"
     ]
 }
