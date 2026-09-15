@@ -7,6 +7,14 @@
             "minimum": 1,
             "multipleOf": 1
         },
+        "profile_type": {
+            "type": "string",
+            "enum": [
+                "espresso",
+                "cleaning"
+            ],
+            "default": "espresso"
+        },
         "name": {
             "type": "string"
         },
@@ -224,6 +232,73 @@
                             ]
                         }
                     },
+                    "nodes": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "controllers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "time_reference",
+                                                    "position_reference",
+                                                    "log_controller",
+                                                    "temperature_controller",
+                                                    "move_piston_controller",
+                                                    "pressure_controller",
+                                                    "end_profile"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "kind"
+                                        ]
+                                    }
+                                },
+                                "triggers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "kind": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "exit",
+                                                    "water_detection_trigger",
+                                                    "timer_trigger",
+                                                    "temperature_value_trigger",
+                                                    "button_trigger",
+                                                    "piston_speed_trigger",
+                                                    "pressure_value_trigger"
+                                                ]
+                                            },
+                                            "next_node_id": {
+                                                "type": "integer"
+                                            }
+                                        },
+                                        "required": [
+                                            "kind",
+                                            "next_node_id"
+                                        ]
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "controllers",
+                                "triggers"
+                            ]
+                        }
+                    },
                     "limits": {
                         "type": "array",
                         "optional": true,
@@ -257,22 +332,185 @@
                     }
                 },
                 "required": [
-                    "name",
-                    "key",
-                    "type",
-                    "dynamics",
-                    "exit_triggers"
+                    "name"
+                ],
+                "oneOf": [
+                    {
+                        "required": [
+                            "key",
+                            "type",
+                            "dynamics",
+                            "exit_triggers"
+                        ],
+                        "not": {
+                            "required": [
+                                "nodes"
+                            ]
+                        }
+                    },
+                    {
+                        "required": [
+                            "nodes"
+                        ],
+                        "not": {
+                            "anyOf": [
+                                {
+                                    "required": [
+                                        "key"
+                                    ]
+                                },
+                                {
+                                    "required": [
+                                        "type"
+                                    ]
+                                },
+                                {
+                                    "required": [
+                                        "dynamics"
+                                    ]
+                                },
+                                {
+                                    "required": [
+                                        "exit_triggers"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
                 ]
             }
         }
     },
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "profile_type": {
+                        "const": "cleaning"
+                    }
+                },
+                "required": [
+                    "profile_type"
+                ]
+            },
+            "then": {
+                "required": [
+                    "stages"
+                ],
+                "properties": {
+                    "temperature": {
+                        "type": "number",
+                        "const": 65
+                    },
+                    "stages": {
+                        "type": "array",
+                        "items": [
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "heating"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "click to start"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "home"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "purge"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "finished"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "cleaning failed"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "name": {
+                                        "const": "END_STAGE"
+                                    }
+                                },
+                                "required": [
+                                    "nodes"
+                                ]
+                            }
+                        ],
+                        "additionalItems": false,
+                        "minItems": 7,
+                        "maxItems": 7
+                    }
+                },
+                "not": {
+                    "required": [
+                        "final_weight"
+                    ]
+                }
+            },
+            "else": {
+                "required": [
+                    "final_weight",
+                    "stages"
+                ],
+                "properties": {
+                    "stages": {
+                        "items": {
+                            "not": {
+                                "required": [
+                                    "nodes"
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ],
     "required": [
         "name",
         "id",
         "author",
         "author_id",
-        "temperature",
-        "final_weight",
-        "stages"
+        "temperature"
     ]
 }
