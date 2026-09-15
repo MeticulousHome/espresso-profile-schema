@@ -1,0 +1,400 @@
+{
+  "profile_type": "cleaning",
+  "name": "Group Flush",
+  "id": "fc14d89e-2b10-47b5-9ea0-a2735c7ee777",
+  "author": "Meticulous",
+  "author_id": "d9123a0a-d3d7-40fd-a548-b81376e43f23",
+  "previous_authors": [],
+  "display": {
+    "accentColor": "#173b31",
+    "shortDescription": "Flush and wipe the group head"
+  },
+  "temperature": 65,
+  "source": "Meticulous",
+  "stages": [
+    {
+      "name": "heating",
+      "nodes": [
+        {
+          "id": -1,
+          "controllers": [
+            { "kind": "time_reference", "id": 1 },
+            { "kind": "time_reference", "id": 2 }
+          ],
+          "triggers": [{ "kind": "exit", "next_node_id": 1 }]
+        },
+        {
+          "id": 1,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "water_detection_trigger",
+              "value": true,
+              "next_node_id": 10
+            },
+            {
+              "kind": "water_detection_trigger",
+              "value": false,
+              "next_node_id": 2
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "controllers": [
+            { "kind": "log_controller", "message": "No Water" },
+            { "kind": "time_reference", "id": 3 }
+          ],
+          "triggers": [
+            {
+              "kind": "water_detection_trigger",
+              "value": true,
+              "next_node_id": 10
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 3,
+              "operator": ">=",
+              "value": 2,
+              "next_node_id": 1
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 1,
+              "operator": ">=",
+              "value": 300,
+              "next_node_id": 90
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "controllers": [
+            {
+              "kind": "temperature_controller",
+              "algorithm": "Water Temperature PID v1.0",
+              "curve": {
+                "id": 2,
+                "interpolation_kind": "linear_interpolation",
+                "points": [[0, 65]],
+                "reference": { "kind": "time", "id": 2 }
+              }
+            },
+            { "kind": "position_reference", "id": 1 }
+          ],
+          "triggers": [
+            {
+              "kind": "temperature_value_trigger",
+              "source": "Water Temperature",
+              "operator": ">=",
+              "value": 65,
+              "next_node_id": 20
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 1,
+              "operator": ">=",
+              "value": 900,
+              "next_node_id": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "click to start",
+      "nodes": [
+        {
+          "id": 20,
+          "controllers": [
+            { "kind": "log_controller", "message": "Click to start" },
+            { "kind": "time_reference", "id": 20 }
+          ],
+          "triggers": [
+            {
+              "kind": "button_trigger",
+              "source": "Encoder Button",
+              "gesture": "Single Tap",
+              "next_node_id": 30
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 20,
+              "operator": ">=",
+              "value": 600,
+              "next_node_id": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "home",
+      "nodes": [
+        {
+          "id": 30,
+          "controllers": [{ "kind": "time_reference", "id": 30 }],
+          "triggers": [{ "kind": "exit", "next_node_id": 31 }]
+        },
+        {
+          "id": 31,
+          "controllers": [
+            {
+              "kind": "move_piston_controller",
+              "algorithm": "Piston Ease-In",
+              "direction": "UP",
+              "speed": 6
+            }
+          ],
+          "triggers": [
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 30,
+              "operator": ">=",
+              "value": 2,
+              "next_node_id": 32
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "piston_speed_trigger",
+              "operator": "==",
+              "value": 0,
+              "next_node_id": 40
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 30,
+              "operator": ">=",
+              "value": 20,
+              "next_node_id": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "purge",
+      "nodes": [
+        {
+          "id": 40,
+          "controllers": [
+            { "kind": "time_reference", "id": 40 },
+            {
+              "kind": "move_piston_controller",
+              "algorithm": "Piston Fast",
+              "direction": "DOWN",
+              "speed": 6
+            }
+          ],
+          "triggers": [{ "kind": "exit", "next_node_id": 41 }]
+        },
+        {
+          "id": 41,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "pressure_value_trigger",
+              "source": "Pressure Raw",
+              "operator": ">=",
+              "value": 6,
+              "next_node_id": 42
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 2,
+              "next_node_id": 45
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "controllers": [
+            {
+              "kind": "pressure_controller",
+              "algorithm": "Pressure PID v1.0",
+              "curve": {
+                "id": 40,
+                "interpolation_kind": "linear_interpolation",
+                "points": [[0, 6]],
+                "time_reference_id": 40
+              }
+            }
+          ],
+          "triggers": [
+            {
+              "kind": "piston_speed_trigger",
+              "operator": "==",
+              "value": 0,
+              "next_node_id": 43
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 20,
+              "next_node_id": 90
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "controllers": [
+            {
+              "kind": "move_piston_controller",
+              "algorithm": "Piston Ease-In",
+              "direction": "DOWN",
+              "speed": 6
+            }
+          ],
+          "triggers": [
+            {
+              "kind": "piston_speed_trigger",
+              "operator": "==",
+              "value": 0,
+              "next_node_id": 43
+            },
+            {
+              "kind": "pressure_value_trigger",
+              "source": "Pressure Raw",
+              "operator": ">=",
+              "value": 6,
+              "next_node_id": 42
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 20,
+              "next_node_id": 90
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "controllers": [{ "kind": "time_reference", "id": 43 }],
+          "triggers": [{ "kind": "exit", "next_node_id": 46 }]
+        },
+        {
+          "id": 46,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "piston_speed_trigger",
+              "operator": "!=",
+              "value": 0,
+              "next_node_id": 43
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 43,
+              "operator": ">=",
+              "value": 2,
+              "next_node_id": 47
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 20,
+              "next_node_id": 90
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "controllers": [{ "kind": "time_reference", "id": 47 }],
+          "triggers": [{ "kind": "exit", "next_node_id": 48 }]
+        },
+        {
+          "id": 48,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "pressure_value_trigger",
+              "source": "Pressure Raw",
+              "operator": "<=",
+              "value": 0.5,
+              "next_node_id": 49
+            },
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 20,
+              "next_node_id": 90
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "controllers": [],
+          "triggers": [
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 40,
+              "operator": ">=",
+              "value": 1,
+              "next_node_id": 80
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "finished",
+      "nodes": [
+        {
+          "id": 80,
+          "controllers": [{ "kind": "time_reference", "id": 80 }],
+          "triggers": [
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 80,
+              "operator": ">=",
+              "value": 1,
+              "next_node_id": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cleaning failed",
+      "nodes": [
+        {
+          "id": 90,
+          "controllers": [
+            { "kind": "log_controller", "message": "Cleaning failed" },
+            { "kind": "time_reference", "id": 90 }
+          ],
+          "triggers": [
+            {
+              "kind": "timer_trigger",
+              "timer_reference_id": 90,
+              "operator": ">=",
+              "value": 1,
+              "next_node_id": -2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "END_STAGE",
+      "nodes": [
+        {
+          "id": -2,
+          "controllers": [{ "kind": "end_profile" }],
+          "triggers": []
+        }
+      ]
+    }
+  ]
+}
